@@ -2,3 +2,4 @@
 /pkg/di/wire_gen.go
 .DS_Store
 .env
+go.sum
