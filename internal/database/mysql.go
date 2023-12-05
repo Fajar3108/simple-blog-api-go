@@ -1,35 +1,35 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
+	"os"
 )
 
-var db *sql.DB
+var db *gorm.DB
 
-func InitDB(user, password, host, port, dbName string) *sql.DB {
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbName)
+func InitDB() *gorm.DB {
+	if db != nil {
+		return db
+	}
+
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
+
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, dbName)
 
 	var err error
 
-	db, err = sql.Open("mysql", dataSourceName)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = db.Ping()
+	db, err = gorm.Open(mysql.Open(dataSourceName), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	return db
-}
-
-func CloseDB() {
-	if db != nil {
-		db.Close()
-	}
 }
