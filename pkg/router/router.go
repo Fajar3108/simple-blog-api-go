@@ -1,17 +1,16 @@
 package router
 
 import (
-	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"net/http"
+	"simple-blog-api-golang/pkg/di"
 )
 
 func SetupRouter() *httprouter.Router {
 	router := httprouter.New()
 
-	router.GET("/", func(writer http.ResponseWriter, request *http.Request, _ httprouter.Params) {
-		fmt.Fprintln(writer, "Hello World")
-	})
+	postHandler := di.InitializeApp()
+
+	router.GET("/api/posts", postHandler.Index)
 
 	return router
 }
