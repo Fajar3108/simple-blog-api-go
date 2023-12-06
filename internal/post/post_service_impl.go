@@ -3,10 +3,10 @@ package post
 import "context"
 
 type postService struct {
-	postRepository PostRepository
+	postRepository Repository
 }
 
-func NewPostService(postRepository PostRepository) PostService {
+func NewPostService(postRepository Repository) Service {
 	return &postService{postRepository: postRepository}
 }
 
@@ -18,4 +18,14 @@ func (ps *postService) GetPosts(ctx context.Context) ([]Post, error) {
 	}
 
 	return posts, nil
+}
+
+func (ps *postService) GetPostById(ctx context.Context, id int) (*Post, error) {
+	post, err := ps.postRepository.FindById(ctx, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
 }

@@ -10,20 +10,38 @@ type postRepository struct {
 	db *gorm.DB
 }
 
-func NewPostRepository() PostRepository {
+func NewPostRepository() Repository {
+	db, err := database.InitDB()
+
+	if err != nil {
+		panic(err)
+	}
+
 	return &postRepository{
-		db: database.InitDB(),
+		db: db,
 	}
 }
 
 func (pr *postRepository) FindAll(ctx context.Context) ([]Post, error) {
 	var posts []Post
 
-	result := pr.db.Order("id desc").Find(&posts)
+	result := pr.db.WithContext(ctx).Order("id desc").Find(&posts)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
 	return posts, nil
+}
+
+func (pr *postRepository) FindById(ctx context.Context, id int) (*Post, error) {
+	var post *Post
+
+	result := pr.db.WithContext(ctx).First(&post, id)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return post, nil
 }

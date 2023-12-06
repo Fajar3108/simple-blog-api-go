@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	_ "simple-blog-api-golang/configs"
 	"simple-blog-api-golang/internal/database"
 	"simple-blog-api-golang/internal/post"
 	"simple-blog-api-golang/pkg/router"
@@ -17,11 +17,12 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file:", err)
+	db, err := database.InitDB()
+
+	if err != nil {
+		log.Fatalf("error initializing database: %s", err)
 	}
 
-	db := database.InitDB()
 	if err := db.AutoMigrate(&post.Post{}); err != nil {
 		log.Fatal("Error auto migrating database:", err)
 	}

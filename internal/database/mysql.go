@@ -4,32 +4,31 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"os"
+	"simple-blog-api-golang/configs"
 )
 
 var db *gorm.DB
 
-func InitDB() *gorm.DB {
+func InitDB() (*gorm.DB, error) {
 	if db != nil {
-		return db
+		return db, nil
 	}
 
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	host := os.Getenv("DB_HOST")
-	port := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
-
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, dbName)
+	dataSourceName := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		configs.Env.DbUser,
+		configs.Env.DbPassword,
+		configs.Env.DbHost,
+		configs.Env.DbPort,
+		configs.Env.DbName)
 
 	var err error
 
 	db, err = gorm.Open(mysql.Open(dataSourceName), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }

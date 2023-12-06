@@ -8,8 +8,8 @@ import (
 	"simple-blog-api-golang/internal/post"
 )
 
-func InitializeApp() *post.PostHandler {
+func InitializeApp() *post.Handler {
 	wire.Build(post.NewPostHandler, post.NewPostService, post.NewPostRepository)
 
-	return &post.PostHandler{}
+	return &post.Handler{}
 }

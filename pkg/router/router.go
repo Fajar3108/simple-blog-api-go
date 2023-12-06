@@ -11,6 +11,7 @@ func SetupRouter() *httprouter.Router {
 	postHandler := di.InitializeApp()
 
 	router.GET("/api/posts", postHandler.Index)
+	router.GET("/api/posts/:id", postHandler.Show)
 
 	return router
 }
