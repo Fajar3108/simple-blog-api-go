@@ -3,23 +3,14 @@ package post
 import (
 	"context"
 	"gorm.io/gorm"
-	"simple-blog-api-golang/internal/database"
 )
 
 type postRepository struct {
 	db *gorm.DB
 }
 
-func NewPostRepository() Repository {
-	db, err := database.InitDB()
-
-	if err != nil {
-		panic(err)
-	}
-
-	return &postRepository{
-		db: db,
-	}
+func NewPostRepository(db *gorm.DB) Repository {
+	return &postRepository{db: db}
 }
 
 func (pr *postRepository) FindAll(ctx context.Context) ([]Post, error) {
