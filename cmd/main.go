@@ -12,6 +12,7 @@ import (
 	_ "simple-blog-api-golang/configs"
 	"simple-blog-api-golang/internal/database"
 	"simple-blog-api-golang/internal/post"
+	"simple-blog-api-golang/internal/user"
 	"simple-blog-api-golang/pkg/router"
 	"syscall"
 )
@@ -23,7 +24,7 @@ func main() {
 		log.Fatalf("error initializing database: %s", err)
 	}
 
-	if err := db.AutoMigrate(&post.Post{}); err != nil {
+	if err := db.AutoMigrate(&post.Post{}, &user.User{}); err != nil {
 		log.Fatal("Error auto migrating database:", err)
 	}
 

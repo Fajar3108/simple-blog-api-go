@@ -40,11 +40,15 @@ func (ur *userRepository) FindById(ctx context.Context, id int) (*User, error) {
 func (ur *userRepository) FindByEmail(ctx context.Context, email string) (*User, error) {
 	var user *User
 
-	result := ur.db.WithContext(ctx).Where("email=" + email).First(user)
+	result := ur.db.WithContext(ctx).Where("email = ?", email).First(&user)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
 	return user, nil
+}
+
+func (ur *userRepository) Store(ctx context.Context, user *User) error {
+	return ur.db.WithContext(ctx).Create(user).Error
 }

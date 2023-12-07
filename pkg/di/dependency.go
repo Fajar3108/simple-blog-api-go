@@ -11,5 +11,8 @@ type Dependency struct {
 }
 
 func NewDependency(postHandler *post.Handler, authHandler *auth.Handler) *Dependency {
-	return &Dependency{PostHandler: postHandler, AuthHandler: authHandler}
+	return &Dependency{
+		PostHandler: postHandler,
+		AuthHandler: authHandler,
+	}
 }
