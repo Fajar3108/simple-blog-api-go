@@ -4,7 +4,7 @@ import "simple-blog-api-golang/pkg/resource"
 
 type LoginResource struct {
 	resource.GeneralResource
-	Token string
+	Token string `json:"token"`
 }
 
 func NewLoginResource(generalResource resource.GeneralResource, token string) *LoginResource {
