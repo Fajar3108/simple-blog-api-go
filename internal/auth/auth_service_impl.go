@@ -23,7 +23,7 @@ func NewAuthService(userRepository user.Repository) AuthService {
 
 func (as *authService) Signin(ctx context.Context, userRequest *auth_requests.LoginRequest) (string, error) {
 	if err := validation.Validate[*auth_requests.LoginRequest](userRequest); err != nil {
-		return "", fmt.Errorf("Errror validation: ", err.(validator.ValidationErrors).Error())
+		return "", fmt.Errorf("Error validation: ", err.(validator.ValidationErrors))
 	}
 	userByEmail, err := as.userRepository.FindByEmail(ctx, userRequest.Email)
 
@@ -45,7 +45,7 @@ func (as *authService) Signin(ctx context.Context, userRequest *auth_requests.Lo
 
 func (as *authService) Signup(ctx context.Context, registerRequest *auth_requests.RegisterRequest) (string, error) {
 	if err := validation.Validate[*auth_requests.RegisterRequest](registerRequest); err != nil {
-		return "", fmt.Errorf("Errror validation: ", err)
+		return "", fmt.Errorf("Error validation: ", err)
 	}
 
 	userByEmail, _ := as.userRepository.FindByEmail(ctx, registerRequest.Email)
