@@ -4,10 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/go-playground/validator"
 	"simple-blog-api-golang/internal/auth/auth_requests"
 	"simple-blog-api-golang/internal/user"
 	"simple-blog-api-golang/pkg/encryption"
 	"simple-blog-api-golang/pkg/jwt_service"
+	"simple-blog-api-golang/pkg/validation"
 	"time"
 )
 
@@ -20,6 +22,9 @@ func NewAuthService(userRepository user.Repository) AuthService {
 }
 
 func (as *authService) Signin(ctx context.Context, userRequest *auth_requests.LoginRequest) (string, error) {
+	if err := validation.Validate[*auth_requests.LoginRequest](userRequest); err != nil {
+		return "", fmt.Errorf("Errror validation: ", err.(validator.ValidationErrors).Error())
+	}
 	userByEmail, err := as.userRepository.FindByEmail(ctx, userRequest.Email)
 
 	if err != nil {
@@ -39,6 +44,10 @@ func (as *authService) Signin(ctx context.Context, userRequest *auth_requests.Lo
 }
 
 func (as *authService) Signup(ctx context.Context, registerRequest *auth_requests.RegisterRequest) (string, error) {
+	if err := validation.Validate[*auth_requests.RegisterRequest](registerRequest); err != nil {
+		return "", fmt.Errorf("Errror validation: ", err)
+	}
+
 	userByEmail, _ := as.userRepository.FindByEmail(ctx, registerRequest.Email)
 
 	if userByEmail != nil {

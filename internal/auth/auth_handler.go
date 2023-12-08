@@ -28,7 +28,7 @@ func (ah *Handler) Signin(w http.ResponseWriter, r *http.Request, _ httprouter.P
 	token, err := ah.authService.Signin(r.Context(), userRequest)
 
 	if err != nil {
-		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 

@@ -31,7 +31,10 @@ func (ph *Handler) Index(w http.ResponseWriter, r *http.Request, _ httprouter.Pa
 		return
 	}
 
-	w.Write(response)
+	_, err = w.Write(response)
+	if err != nil {
+		return
+	}
 }
 
 func (ph *Handler) Show(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -58,5 +61,8 @@ func (ph *Handler) Show(w http.ResponseWriter, r *http.Request, params httproute
 		return
 	}
 
-	w.Write(response)
+	_, err = w.Write(response)
+	if err != nil {
+		return
+	}
 }
